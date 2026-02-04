@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Users - Xogta Dadka Is Diiwaan Galiyay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-weight: 600;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .clear-btn {
+            background: #ef4444;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Registered Users List</h1>
+
+    <div class="container">
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="userList">
+                <!-- Data will be injected here -->
+            </tbody>
+        </table>
+        <div id="emptyMessage" class="no-data" style="display:none;">
+            No data saved yet.
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="index.html" class="btn">Back to Register</a>
+            <button onclick="clearData()" class="btn clear-btn">Clear All Data</button>
+        </div>
+    </div>
+
+    <script>
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            const userList = document.getElementById('userList');
+            const emptyMessage = document.getElementById('emptyMessage');
+            const userTable = document.getElementById('userTable');
+
+            if (users.length === 0) {
+                userTable.style.display = 'none';
+                emptyMessage.style.display = 'block';
+                return;
+            }
+
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.firstname || '-'}</td>
+                    <td>${user.lastname || '-'}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${new Date().toLocaleDateString()}</td>
+                `;
+                userList.appendChild(row);
+            });
+        }
+
+        function clearData() {
+            if (confirm('Are you sure you want to clear all data?')) {
+                localStorage.removeItem('registeredUsers');
+                loadUsers();
+            }
+        }
+
+        // Load data on page load
+        loadUsers();
+    </script>
+</body>
+
+</html>
